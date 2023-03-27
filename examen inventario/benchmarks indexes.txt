@@ -1,0 +1,34 @@
+-- sintaxis: CREATE INDEX nombre_indice ON tabla(nombre_columna);
+--gracias a los indices podemos tener una busqueda mas rapida, ejemplo:
+
+SELECT nombre FROM vendedor WHERE nombre ilike 'maria'; --sin el indice tarda Execution Time: 10.395 ms
+
+--Creamos un indice
+CREATE INDEX nombre ON vendedor(nombre);
+
+--Y con el indice tarda Execution Time: 0.026 ms
+
+--para ver cuanto tarda use esto
+EXPLAIN ANALYZE SELECT nombre FROM vendedor WHERE nombre ilike 'maria'; 
+
+
+--EJEMPLOS
+
+CREATE INDEX infact ON factura(fecha_factura);
+EXPLAIN ANALYZE SELECT fecha_factura  FROM factura ORDER BY fecha_factura DESC LIMIT 1; --tarda sin indice 0.021 y 0.016 con indice
+
+
+--indices para agregar a la base de datos que mejoraran el acceso a partir de las querys mas usadas (esto lo colocare tambien en un archivo a parte):
+
+CREATE INDEX codbarras ON producto(codigo_barras); --buscar un producto en especifico
+CREATE INDEX codbarcom ON producto_compra(codigo_barras); --buscar entradas
+CREATE INDEX codbarven ON producto_venta(codigo_barras); --para buscar las salidas
+CREATE INDEX precios ON producto(precio_tienda); --para precios (sirve en low to high)
+CREATE INDEX dates ON factura(fecha_factura);--buscar fechas de facturas 
+
+CREATE INDEX estado ON estados(nombre);
+CREATE INDEX ciudades ON ciudad(nombre);
+CREATE INDEX direcciones ON direccion(nombre);-- estas 3 las puse porque son las tablas mas grandes por si se necesita buscar algo
+
+--esas son las que me parecen mas esenciales sin embargo las que indique al inicio y muchas mas tambien ayudan
+
